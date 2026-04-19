@@ -1,0 +1,16 @@
+{
+  "name": "ragavi-reviews-automation",
+  "version": "1.0.0",
+  "description": "Automated review posting for ragavi.in - posts human-like reviews on 5 random products per run",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node index.js --dry-run"
+  },
+  "dependencies": {
+    "playwright": "^1.43.1",
+    "playwright-extra": "^4.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "axios": "^1.6.8"
+  }
+}
