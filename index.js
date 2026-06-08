@@ -348,11 +348,15 @@ function generateReview(productTitle, productType) {
 async function fetchProductList(page) {
   const allProducts = [];
   try {
-    for (const p of [1, 2]) {
+    let p = 1;
+    let hasMore = true;
+    while (hasMore) {
       const url = `${BASE_URL}/products.json?limit=50&page=${p}`;
-      await page.goto(url, { waitUntil: 'domcontentloaded' });
-      const content = await page.textContent('pre').catch(() => page.textContent('body'));
-      const json = JSON.parse(content);
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const json = await response.json();
       if (json.products && json.products.length > 0) {
         allProducts.push(...json.products.map(pr => ({
           title: pr.title,
@@ -360,6 +364,10 @@ async function fetchProductList(page) {
           url: `${BASE_URL}/products/${pr.handle}`,
           productType: pr.product_type,
         })));
+        console.log(`  Fetched page ${p} (${json.products.length} products)`);
+        p++;
+      } else {
+        hasMore = false;
       }
     }
   } catch (err) {
